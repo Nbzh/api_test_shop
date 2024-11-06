@@ -4,21 +4,15 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api")
-class ArticleController {
+class ArticleController(private val services: ArticleServices) {
     @GetMapping("/")
     fun index(@RequestParam("name") name: String) = "Hello, $name!"
 
     @GetMapping("/articles")
-    fun getArticles(@RequestParam("categories", required = false) categoryIds: List<String>? = null): List<Article> {
-        val random = (5..20).random()
-        return List(random) { fakeArticle() }.run {
-            if (categoryIds.isNullOrEmpty()) this
-            else filter { article -> article.category.id in categoryIds }
-        }
-    }
+    fun getArticles(@RequestParam("categories", required = false) categoryIds: List<String>? = null): List<ArticleResponse> =
+        services.getArticles(categoryIds)
 
     @GetMapping("/articles/{articleId}")
-    fun getArticleById(@PathVariable articleId: String): Article {
-        return fakeArticle(id = articleId)
-    }
+    fun getArticleById(@PathVariable articleId: String): ArticleResponse? =
+        services.getArticle(articleId)
 }

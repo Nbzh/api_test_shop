@@ -6,37 +6,37 @@ import kotlin.random.Random
 val fakeLabels
     get() =
         listOf(
-            DbLabel(
+            Label(
                 id = "label_fish",
                 name = "Fish",
                 image = "https://th.bing.com/th/id/OIP.N-qXcubQhRqU1O0kvRdG4QHaHa?w=178&h=180&c=7&r=0&o=5&dpr=2&pid=1.7"
             ),
-            DbLabel(
+            Label(
                 id = "label_peanut",
                 name = "Peanut",
                 image = "https://th.bing.com/th/id/OIP.N-qXcubQhRqU1O0kvRdG4QHaHa?w=178&h=180&c=7&r=0&o=5&dpr=2&pid=1.7"
             ),
-            DbLabel(
+            Label(
                 id = "label_meat",
                 name = "Meat",
                 image = "https://th.bing.com/th/id/OIP.N-qXcubQhRqU1O0kvRdG4QHaHa?w=178&h=180&c=7&r=0&o=5&dpr=2&pid=1.7"
             ),
-            DbLabel(
+            Label(
                 id = "label_gluten_free",
                 name = "Gluten Free",
                 image = "https://th.bing.com/th/id/OIP.N-qXcubQhRqU1O0kvRdG4QHaHa?w=178&h=180&c=7&r=0&o=5&dpr=2&pid=1.7"
             ),
-            DbLabel(
+            Label(
                 id = "label_healthy",
                 name = "Healthy",
                 image = "https://th.bing.com/th/id/OIP.N-qXcubQhRqU1O0kvRdG4QHaHa?w=178&h=180&c=7&r=0&o=5&dpr=2&pid=1.7"
             ),
-            DbLabel(
+            Label(
                 id = "label_cheese",
                 name = "Cheese",
                 image = "https://th.bing.com/th/id/OIP.N-qXcubQhRqU1O0kvRdG4QHaHa?w=178&h=180&c=7&r=0&o=5&dpr=2&pid=1.7"
             ),
-            DbLabel(
+            Label(
                 id = "label_egg",
                 name = "Egg",
                 image = "https://th.bing.com/th/id/OIP.N-qXcubQhRqU1O0kvRdG4QHaHa?w=178&h=180&c=7&r=0&o=5&dpr=2&pid=1.7"
@@ -46,31 +46,31 @@ val fakeLabels
 val fakeCategories
     get() =
         listOf(
-            DbCategory(
+            Category(
                 id = "category_italian",
                 name = "Italian",
                 color = "008000",
                 image = "https://picsum.photos/32/32"
             ),
-            DbCategory(
+            Category(
                 id = "category_chinese",
                 name = "Chinese",
                 color = "FFFF00",
                 image = "https://picsum.photos/32/32"
             ),
-            DbCategory(
+            Category(
                 id = "category_france",
                 name = "French",
                 color = "0074D9",
                 image = "https://picsum.photos/32/32"
             ),
-            DbCategory(
+            Category(
                 id = "category_argentina",
                 name = "Argentina",
                 color = "00BFFF",
                 image = "https://picsum.photos/32/32"
             ),
-            DbCategory(
+            Category(
                 id = "category_indonesia",
                 name = "Indonesia",
                 color = "FF0000",
@@ -144,10 +144,10 @@ object FoodDescriptionGenerator {
     }
 }
 
-fun fakeArticle(id: String = UUID.randomUUID().toString()): Article {
+fun fakeArticle(id: String = UUID.randomUUID().toString()): ArticleResponse {
     val category = fakeCategories.shuffled().first()
     val labels = fakeLabels.shuffled().take(Random.nextInt(1, fakeLabels.size))
-    return Article(
+    return ArticleResponse(
         id = id,
         category = category,
         name = FoodNameGenerator.generateRandomFoodName(),
