@@ -4,37 +4,41 @@ data class ArticleResponse(
     var id: String,
     val category: Category,
     val name: String,
-    val image: String,
-    val description: String,
+    val image: String?,
+    val description: String?,
     val isVeggies: Boolean,
     val price: Double,
     val priceUnit: String,
     val labels: List<Label>
 )
 
-data class Label(val id: String, val name: String, val image: String)
+data class Label(var id: String, val name: String, val image: String?)
 
-data class Category(val id: String, val name: String, val image: String, val color: String)
+data class Category(var id: String, val name: String, val image: String?, val color: String?)
+
+data class LabelParams(var id: String?, val name: String, val image: String?)
+
+data class CategoryParams(var id: String?, val name: String, val image: String?, val color: String?)
 
 data class Article(
     var id: String,
     val categoryId: String,
     val name: String,
-    val image: String,
-    val description: String,
-    val isVeggies: Boolean,
+    val image: String?,
+    val description: String?,
+    val isVeggan: Boolean,
     val price: Double,
     val priceUnit: String
 )
 
 data class ArticleParams(
-    var id: String,
+    var id: String?,
     val categoryId: String,
     val name: String,
-    val image: String,
-    val description: String,
+    val image: String?,
+    val description: String?,
     val labelIds : List<String>,
-    val isVeggies: Boolean,
+    val isVeggan: Boolean,
     val price: Double,
     val priceUnit: String
 )

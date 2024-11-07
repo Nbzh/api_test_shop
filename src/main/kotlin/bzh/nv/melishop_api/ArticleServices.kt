@@ -10,11 +10,11 @@ import java.sql.ResultSet
 class ArticleServices(private val db: JdbcTemplate) {
 
     private fun getCategory(categoryId: String): Category? =
-        db.queryForObject("select * from DbCategory where id = $categoryId", Category::class.java)
+        db.queryForObject("select * from category where id = $categoryId", Category::class.java)
 
     private fun getLabels(articleId: String): List<Label> {
         val labelQuery =
-            "select l.* from Label as l inner join ArticleLabel as al on l.id = al.labelId where al.articleId = $articleId"
+            "select l.* from label as l inner join article_label as al on l.id = al.labelId where al.articleId = $articleId"
         return db.queryForList(labelQuery, Label::class.java)
     }
 
@@ -28,35 +28,50 @@ class ArticleServices(private val db: JdbcTemplate) {
             getString("name"),
             getString("image"),
             getString("description"),
-            getBoolean("isVeggies"),
+            getBoolean("isVeggan"),
             getDouble("price"),
             getString("priceUnit"),
             labels
         )
     }
 
-    fun getArticle(article: String): ArticleResponse? {
-        val sqlQuery = "SELECT * FROM Article where id = $article"
-        return db.query(sqlQuery) { rs, _ ->
-            rs.toArticleResponse()
-        }.firstOrNull()
+    private fun Article.toArticleResponse(): ArticleResponse {
+        val category = getCategory(categoryId)
+            ?: throw ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "Category not found")
+        val labels = getLabels(id)
+        return ArticleResponse(
+            id,
+            category,
+            name,
+            image,
+            description,
+            isVeggan,
+            price,
+            priceUnit,
+            labels
+        )
     }
 
-    fun getArticles(categories: List<String>?): List<ArticleResponse> {
-        val query = if (categories.isNullOrEmpty()) {
-            "SELECT * FROM Article"
+    fun getArticle(article: String): ArticleResponse =
+        db.queryForObject("SELECT * FROM article where id = ?", Article::class.java, article).toArticleResponse()
+
+
+    fun getArticles(categories: List<String>?): List<ArticleResponse> =
+        if (categories.isNullOrEmpty()) {
+            db.query("SELECT * FROM article") { rs, _ -> rs.toArticleResponse() }
         } else {
-            "SELECT * FROM Article WHERE categoryId IN (${categories.joinToString(",") { "'$it'" }})"
+            db.query(
+                "SELECT * FROM article WHERE categoryId IN (?)",
+                { rs, _ -> rs.toArticleResponse() },
+                categories.joinToString(",") { "'$it'" })
         }
-        return db.query(query) { rs, _ -> rs.toArticleResponse() }
-    }
 
     fun insertOrUpdateArticle(article: ArticleParams): ArticleResponse {
         val sqlInsert =
             """
-                INSERT INTO Article (id, categoryId, name, image, description, isVeggies, price, priceUnit ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-                ON DUPLICATE KEY UPDATE title = VALUES(id), categoryId = VALUES(categoryId), name = VALUES(name), image = VALUES(image),
-                description = VALUES(description), isVeggies = VALUES(isVeggies), price = VALUES(price), priceUnit = VALUES(priceUnit)
+                INSERT INTO article (id, categoryId, name, image, description, isVeggan, price, priceUnit ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ON DUPLICATE KEY UPDATE id = ?, categoryId = ?, name = ?, image = ?,
+                description = ?, isVeggan = ?, price = ?, priceUnit = ?
                  """
         db.update(
             sqlInsert,
@@ -65,18 +80,18 @@ class ArticleServices(private val db: JdbcTemplate) {
             article.name,
             article.image,
             article.description,
-            article.isVeggies,
+            article.isVeggan,
             article.price,
             article.priceUnit
         )
         val labelSqlInsert =
             """
-            INSERT INTO ArticleLabel (articleId, labelId) VALUES (?, ?)
-            ON DUPLICATE KEY UPDATE articleId = VALUES(articleId), labelId = VALUES(labelId)
+            INSERT INTO article_label (articleId, labelId) VALUES (?, ?)
+            ON DUPLICATE KEY UPDATE article_id = ?, label_id = ?
              """
         article.labelIds.forEach { labelId ->
             db.update(labelSqlInsert, article.id, labelId)
         }
-        return getArticle(article.id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Article not inserted")
+        return getArticle(article.id)
     }
 }
