@@ -1,18 +1,41 @@
 package bzh.nv.melishop_api
 
+import org.springframework.http.HttpStatus
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Service
-import java.util.UUID
+import org.springframework.web.server.ResponseStatusException
+import java.util.*
 
 @Service
-class LabelServices(private val db: JdbcTemplate) {
+class LabelServices(private val db: JdbcTemplate, private val contentServices: ContentServices) {
 
-    fun getLabel(labelId: String): Label =
-        db.queryForObject("select * from label where id = ?", Label::class.java, labelId)
+    fun getLabel(labelId: String, language: String): Label? =
+        db.queryForObject(
+            "select * from label where id = ?",
+            { rs, _ ->
+                Label(
+                    id = rs.getString("id"),
+                    name = rs.getString("name").let { name ->
+                        contentServices.getContent(labelId, "name", language) ?: name
+                    },
+                    image = rs.getString("image")
+                )
+            },
+            labelId
+        )
 
 
-    fun getLabels(): List<Label> =
-        db.queryForList("select * from label", Label::class.java)
+    fun getLabels(language: String): List<Label> =
+        db.query("select * from label") { rs, _ ->
+            val labelId = rs.getString("id")
+            Label(
+                id = labelId,
+                name = rs.getString("name").let { name ->
+                    contentServices.getContent(labelId, "name", language) ?: name
+                },
+                image = rs.getString("image")
+            )
+        }
 
     fun getLabelsFromArticle(articleId: String): List<Label> {
         val labelQuery =
@@ -20,17 +43,22 @@ class LabelServices(private val db: JdbcTemplate) {
         return db.queryForList(labelQuery, Label::class.java, articleId)
     }
 
-    fun insertOrUpdateLabel(label: LabelParams): Label {
+    fun insertOrUpdateLabel(label: LabelParams, language: String): Label {
         label.id = label.id ?: UUID.randomUUID().toString()
-        val sqlInsert =
-            """
-            INSERT INTO label (id, name, image ) VALUES (?, ?, ?)
-            ON DUPLICATE KEY UPDATE id = ?, name = ?, image = ?
-            """
-        db.update(sqlInsert, label.id, label.name, label.image)
-        return getLabel(label.id!!)
+        val nameFr = label.name.content["fr"]
+        val nameEn = label.name.content["en"]
+        if (nameFr != null)
+            contentServices.insertOrUpdateContent("content_fr", label.id!!, label.name.key, nameFr)
+        if(nameEn != null)
+            contentServices.insertOrUpdateContent("content_en", label.id!!, label.name.key, nameEn)
+        val sqlMerge = "MERGE INTO label KEY (id) VALUES (?, ?, ?)"
+        db.update(sqlMerge, label.id, label.name.key, label.image)
+        return getLabel(label.id!!, language) ?: throw ResponseStatusException(
+            HttpStatus.NOT_FOUND,
+            "Label with id ${label.id} not found"
+        )
     }
 
-    fun insertOrUpdateLabels(labels: List<LabelParams>) =
-        labels.map { label -> insertOrUpdateLabel(label)  }
+    fun insertOrUpdateLabels(labels: List<LabelParams>, language: String) =
+        labels.map { label -> insertOrUpdateLabel(label, language) }
 }

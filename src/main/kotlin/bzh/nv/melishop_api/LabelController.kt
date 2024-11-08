@@ -7,13 +7,18 @@ import org.springframework.web.bind.annotation.*
 class LabelController(private val services: LabelServices) {
 
     @GetMapping("/labels")
-    fun getLabels() : List<Label> = services.getLabels()
+    fun getLabels(@RequestHeader("Accept-Language") acceptLanguage: String?): List<Label> =
+        services.getLabels(acceptLanguage ?: "en")
 
     @PostMapping("label")
-    fun postLabel(@RequestBody labelParams : LabelParams) =
-        services.insertOrUpdateLabel(labelParams)
+    fun postLabel(
+        @RequestBody labelParams: LabelParams,
+        @RequestHeader("Accept-Language") acceptLanguage: String?
+    ) = services.insertOrUpdateLabel(labelParams, acceptLanguage ?: "en")
 
     @PostMapping("labels")
-    fun postLabels(@RequestBody labelParams : List<LabelParams>) =
-        services.insertOrUpdateLabels(labelParams)
+    fun postLabels(
+        @RequestBody labelParams: List<LabelParams>,
+        @RequestHeader("Accept-Language") acceptLanguage: String?
+    ) = services.insertOrUpdateLabels(labelParams, acceptLanguage ?: "en")
 }

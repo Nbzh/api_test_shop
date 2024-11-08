@@ -28,3 +28,17 @@ articleId     VARCHAR(60)     NOT NULL,
 labelId       VARCHAR(60)     NOT NULL,
 PRIMARY KEY (articleId, labelId)
 );
+
+CREATE TABLE IF NOT EXISTS content_fr (
+resourceId     VARCHAR(60)     NOT NULL,
+contentKey     VARCHAR(60)     NOT NULL,
+content        VARCHAR         NOT NULL,
+PRIMARY KEY (resourceId, contentKey)
+);
+
+CREATE TABLE IF NOT EXISTS content_en (
+resourceId     VARCHAR(60)     NOT NULL,
+contentKey     VARCHAR(60)     NOT NULL,
+content        VARCHAR         NOT NULL,
+PRIMARY KEY (resourceId, contentKey)
+);

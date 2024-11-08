@@ -1,11 +1,9 @@
 package bzh.nv.melishop_api
 
-import org.springframework.http.HttpStatus
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Service
-import org.springframework.web.server.ResponseStatusException
 import java.sql.ResultSet
-import java.util.UUID
+import java.util.*
 
 @Service
 class ArticleServices(

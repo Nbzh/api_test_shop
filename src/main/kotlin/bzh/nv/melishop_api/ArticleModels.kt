@@ -16,9 +16,11 @@ data class Label(var id: String, val name: String, val image: String?)
 
 data class Category(var id: String, val name: String, val image: String?, val color: String?)
 
-data class LabelParams(var id: String?, val name: String, val image: String?)
+data class LabelParams(var id: String?, val name: ContentParams, val image: String?)
 
 data class CategoryParams(var id: String?, val name: String, val image: String?, val color: String?)
+
+data class ContentParams(val key : String, val content : Map<String, String>)
 
 data class Article(
     var id: String,
