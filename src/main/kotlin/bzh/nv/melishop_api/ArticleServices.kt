@@ -1,8 +1,8 @@
 package bzh.nv.melishop_api
 
-import com.jetbrains.exported.JBRApi.Service
 import org.springframework.http.HttpStatus
 import org.springframework.jdbc.core.JdbcTemplate
+import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
 import java.sql.ResultSet
 import java.util.UUID
@@ -16,7 +16,6 @@ class ArticleServices(
 
     private fun ResultSet.toArticleResponse(): ArticleResponse {
         val category = categoryService.getCategory(getString("categoryId"))
-            ?: throw ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "Category not found")
         val labels = labelServices.getLabelsFromArticle(getString("id"))
         return ArticleResponse(
             getString("id"),
@@ -90,4 +89,7 @@ class ArticleServices(
         }
         return getArticle(article.id!!)
     }
+
+    fun insertOrUpdateArticles(articles: List<ArticleParams>) =
+        articles.map { article -> insertOrUpdateArticle(article) }
 }

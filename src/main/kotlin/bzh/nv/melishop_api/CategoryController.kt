@@ -12,4 +12,8 @@ class CategoryController(private val services: CategoryServices) {
     @PostMapping("category")
     fun postCategory(@RequestBody categoryParams : CategoryParams) =
         services.insertOrUpdateCategory(categoryParams)
+
+    @PostMapping("categories")
+    fun postCategories(@RequestBody categoryParams : List<CategoryParams>) =
+        services.insertOrUpdateCategories(categoryParams)
 }

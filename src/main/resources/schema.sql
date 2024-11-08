@@ -4,10 +4,10 @@ id             VARCHAR(60)     PRIMARY KEY,
 categoryId     VARCHAR(60)     NOT NULL,
 name           VARCHAR         NOT NULL,
 image          VARCHAR,
-description    VATCHAR,
+description    VARCHAR,
 isVeggan       BOOLEAN         NOT NULL,
 price          DECIMAL(10,2)   NOT NULL,
-priceUnit      ENUM("UNIT_PIECE", "UNIT_MEAL", "UNIT_GROUP")    NOT NULL,
+priceUnit      ENUM('UNIT_PIECE', 'UNIT_MEAL', 'UNIT_GROUP')    NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS label (
@@ -24,6 +24,7 @@ color          CHAR(6)
 );
 
 CREATE TABLE IF NOT EXISTS article_label (
-articleId     VARCHAR(60)     PRIMARY KEY,
-labelId       VARCHAR(60)     PRIMARY KEY
+articleId     VARCHAR(60)     NOT NULL,
+labelId       VARCHAR(60)     NOT NULL,
+PRIMARY KEY (articleId, labelId)
 );

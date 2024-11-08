@@ -1,1 +1,195 @@
-### POST Label
+### POST Labels
+POST http://localhost:8080/api/labels
+Content-Type: application/json
+
+[
+    {
+        "id" : "label_fish",
+        "name" : "Fish",
+        "image" : "https://th.bing.com/th/id/OIP.N-qXcubQhRqU1O0kvRdG4QHaHa?w=178&h=180&c=7&r=0&o=5&dpr=2&pid=1.7"
+    },
+    {
+        "id": "label_peanut",
+        "name" : "Peanut",
+        "image" : "https://th.bing.com/th/id/OIP.N-qXcubQhRqU1O0kvRdG4QHaHa?w=178&h=180&c=7&r=0&o=5&dpr=2&pid=1.7"
+    },
+    {
+        "id": "label_meat",
+        "name" : "Meat",
+        "image" : "https://th.bing.com/th/id/OIP.N-qXcubQhRqU1O0kvRdG4QHaHa?w=178&h=180&c=7&r=0&o=5&dpr=2&pid=1.7"
+    },
+    {
+        "id" : "label_gluten_free",
+        "name" : "Gluten Free",
+        "image" : "https://th.bing.com/th/id/OIP.N-qXcubQhRqU1O0kvRdG4QHaHa?w=178&h=180&c=7&r=0&o=5&dpr=2&pid=1.7"
+    },
+    {
+        "id": "label_healthy",
+        "name": "Healthy",
+        "image": "https://th.bing.com/th/id/OIP.N-qXcubQhRqU1O0kvRdG4QHaHa?w=178&h=180&c=7&r=0&o=5&dpr=2&pid=1.7"
+    },
+    {
+        "id": "label_cheese",
+        "name": "Cheese",
+        "image": "https://th.bing.com/th/id/OIP.N-qXcubQhRqU1O0kvRdG4QHaHa?w=178&h=180&c=7&r=0&o=5&dpr=2&pid=1.7"
+    },
+    {
+        "id": "label_egg",
+        "name": "Egg",
+        "image": "https://th.bing.com/th/id/OIP.N-qXcubQhRqU1O0kvRdG4QHaHa?w=178&h=180&c=7&r=0&o=5&dpr=2&pid=1.7"
+    }
+]
+
+### POST Categories
+POST http://localhost:8080/api/categories
+Content-Type: application/json
+
+[
+    {
+        "id" : "category_italian",
+        "name" : "Italian",
+        "color" : "008000",
+        "image" : "https://picsum.photos/32/32"
+    },
+    {
+        "id" : "category_chinese",
+        "name" : "Chinese",
+        "color" : "FFFF00",
+        "image" : "https://picsum.photos/32/32"
+    },
+    {
+        "id" : "category_france",
+        "name" : "French",
+        "color" : "0074D9",
+        "image" : "https://picsum.photos/32/32"
+    },
+    {
+        "id" : "category_argentina",
+        "name" : "Argentina",
+        "color" : "00BFFF",
+        "image" : "https://picsum.photos/32/32"
+    },
+    {
+        "id" : "category_indonesia",
+        "name" : "Indonesia",
+        "color" : "FF0000",
+        "image" : "https://picsum.photos/32/32"
+    }
+]
+
+### POST articles
+POST http://localhost:8080/api/articles
+Content-Type: application/json
+
+[
+    {
+        "id": "e4a5ae5c-d469-44d2-a1c1-86f1277f4e42",
+        "categoryId": "category_indonesia",
+        "name": "Savory Waffle",
+        "image": "https://picsum.photos/600/338",
+        "description": "A classic dish with a modern twist, comforting and familiar tastes.",
+        "isVeggies": true,
+        "price": 8.92,
+        "priceUnit": "UNIT_MEAL",
+        "labelIds": ["label_egg","label_gluten_free", "label_healthy","label_peanut","label_fish", "label_meat"]
+    },
+    {
+        "id": "06f614fb-644c-43a7-a141-7eeefa31ea74",
+        "categoryId" : "category_france",
+        "name": "Tangy Pancake",
+        "image": "https://picsum.photos/600/338",
+        "description": "A classic dish with a modern twist, bold and robust flavors.",
+        "isVeggies": false,
+        "price": 14.65,
+        "priceUnit": "UNIT_GROUP",
+        "labelIds": ["id": "label_meat","label_gluten_free","label_cheese"]
+    },
+    {
+        "id": "a02688ae-afdd-4ed0-bd5d-e245cf18838d",
+        "categoryId": "category_italian",
+        "name": "Fluffy Salad",
+        "image": "https://picsum.photos/600/338",
+        "description": "A taste of heaven with sweet and savory notes.",
+        "isVeggies": false,
+        "price": 30.91,
+        "priceUnit": "UNIT_MEAL",
+        "labelIds": ["label_meat", "label_gluten_free","label_fish","label_peanut","label_cheese"]
+    },
+    {
+        "id": "c66af672-3b5f-4b29-8c5b-613e05e3e705",
+        "categoryId": "category_france",
+        "name": "Zesty Waffle",
+        "image": "https://picsum.photos/600/338",
+        "description": "A culinary masterpiece with sweet and savory notes.",
+        "isVeggies": false,
+        "price": 17.41,
+        "priceUnit": "UNIT_GROUP",
+        "labelIds": ["label_cheese","label_meat"]
+    },
+    {
+        "id": "9ee0e16a-7a88-4bee-833b-5f40372f07cf",
+        "categoryId": "category_argentina",
+        "name": "Creamy Waffle",
+        "image": "https://picsum.photos/600/338",
+        "description": "A culinary adventure featuring smoky and earthy hints.",
+        "isVeggies": true,
+        "price": 20.11,
+        "priceUnit": "UNIT_MEAL",
+        "labelIds": ["label_meat"]
+    },
+    {
+        "id": "29a5dea3-4df8-4f04-82ca-65b3153dbd58",
+        "categoryId": "category_argentina",
+        "name": "Tangy Noodle",
+        "image": "https://picsum.photos/600/338",
+        "description": "A culinary adventure featuring fresh and vibrant flavors.",
+        "isVeggies": false,
+        "price": 0.95,
+        "priceUnit": "UNIT_PIECE",
+        "labelIds": ["label_cheese","label_fish","label_peanut","label_egg","label_healthy","label_gluten_free"]
+    },
+    {
+        "id": "a4a2d435-f0ef-47b3-ac05-350cbe9065f9",
+        "category": "category_france",
+        "name": "Sweet Soup",
+        "image": "https://picsum.photos/600/338",
+        "description": "A classic dish with a modern twist, fresh and vibrant flavors.",
+        "isVeggies": true,
+        "price": 29.74,
+        "priceUnit": "UNIT_MEAL",
+        "labels": ["label_peanut", "label_egg", "label_meat", "label_cheese", "label_gluten_free"]
+    },
+    {
+        "id": "28e6a302-989c-4212-ab98-41ce5153f2c1",
+        "category": "category_chinese",
+        "name": "Savory Soup",
+        "image": "https://picsum.photos/600/338",
+        "description": "A feast for the senses with spicy and tangy undertones.",
+        "isVeggies": false,
+        "price": 0.96,
+        "priceUnit": "UNIT_GROUP",
+        "labels": ["label_egg"]
+    },
+    {
+        "id": "3afd0487-9200-4790-98a7-7a2beea7274b",
+        "category": "category_argentina",
+        "name": "Creamy Taco",
+        "image": "https://picsum.photos/600/338",
+        "description": "A harmonious fusion of sweet and savory notes.",
+        "isVeggies": false,
+        "price": 21.26,
+        "priceUnit": "UNIT_PIECE",
+        "labels": ["label_healthy", "label_egg", "label_gluten_free", "label_peanut", "label_meat", "label_fish"]
+    },
+    {
+        "id": "880f28d3-0f46-4584-8d02-ad89a57c531a",
+        "category": "category_indonesia",
+        "name": "Cheesy Pasta",
+        "image": "https://picsum.photos/600/338",
+        "description": "An irresistible combination of spicy and tangy undertones.",
+        "isVeggies": true,
+        "price": 26.53,
+        "priceUnit": "UNIT_MEAL",
+        "labels": ["label_meat", "label_healthy", "label_fish"]
+    }
+]

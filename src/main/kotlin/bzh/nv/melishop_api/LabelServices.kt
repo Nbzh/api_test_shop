@@ -1,7 +1,7 @@
 package bzh.nv.melishop_api
 
-import com.jetbrains.exported.JBRApi.Service
 import org.springframework.jdbc.core.JdbcTemplate
+import org.springframework.stereotype.Service
 import java.util.UUID
 
 @Service
@@ -31,4 +31,6 @@ class LabelServices(private val db: JdbcTemplate) {
         return getLabel(label.id!!)
     }
 
+    fun insertOrUpdateLabels(labels: List<LabelParams>) =
+        labels.map { label -> insertOrUpdateLabel(label)  }
 }
