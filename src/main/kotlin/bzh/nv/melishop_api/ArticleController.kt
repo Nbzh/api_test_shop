@@ -5,8 +5,6 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/api")
 class ArticleController(private val services: ArticleServices) {
-    @GetMapping("/")
-    fun index(@RequestParam("name") name: String) = "Hello, $name!"
 
     @GetMapping("/articles")
     fun getArticles(@RequestParam("categories", required = false) categoryIds: List<String>? = null): List<ArticleResponse> =

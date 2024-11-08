@@ -5,23 +5,19 @@ import org.springframework.http.HttpStatus
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.web.server.ResponseStatusException
 import java.sql.ResultSet
+import java.util.UUID
 
 @Service
-class ArticleServices(private val db: JdbcTemplate) {
-
-    private fun getCategory(categoryId: String): Category? =
-        db.queryForObject("select * from category where id = $categoryId", Category::class.java)
-
-    private fun getLabels(articleId: String): List<Label> {
-        val labelQuery =
-            "select l.* from label as l inner join article_label as al on l.id = al.labelId where al.articleId = $articleId"
-        return db.queryForList(labelQuery, Label::class.java)
-    }
+class ArticleServices(
+    private val db: JdbcTemplate,
+    private val categoryService: CategoryServices,
+    private val labelServices: LabelServices
+) {
 
     private fun ResultSet.toArticleResponse(): ArticleResponse {
-        val category = getCategory(getString("categoryId"))
+        val category = categoryService.getCategory(getString("categoryId"))
             ?: throw ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "Category not found")
-        val labels = getLabels(getString("id"))
+        val labels = labelServices.getLabelsFromArticle(getString("id"))
         return ArticleResponse(
             getString("id"),
             category,
@@ -36,9 +32,8 @@ class ArticleServices(private val db: JdbcTemplate) {
     }
 
     private fun Article.toArticleResponse(): ArticleResponse {
-        val category = getCategory(categoryId)
-            ?: throw ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "Category not found")
-        val labels = getLabels(id)
+        val category = categoryService.getCategory(categoryId)
+        val labels = labelServices.getLabelsFromArticle(id)
         return ArticleResponse(
             id,
             category,
@@ -67,6 +62,7 @@ class ArticleServices(private val db: JdbcTemplate) {
         }
 
     fun insertOrUpdateArticle(article: ArticleParams): ArticleResponse {
+        article.id = article.id ?: UUID.randomUUID().toString()
         val sqlInsert =
             """
                 INSERT INTO article (id, categoryId, name, image, description, isVeggan, price, priceUnit ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -92,6 +88,6 @@ class ArticleServices(private val db: JdbcTemplate) {
         article.labelIds.forEach { labelId ->
             db.update(labelSqlInsert, article.id, labelId)
         }
-        return getArticle(article.id)
+        return getArticle(article.id!!)
     }
 }
