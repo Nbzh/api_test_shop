@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api")
 class CategoryController(private val services: CategoryServices) {
 
+    @CrossOrigin(origins = ["http://localhost:8081"], allowedHeaders = ["*"], allowCredentials = "true")
     @GetMapping("/categories")
     fun getCategories(@RequestHeader("Accept-Language") acceptLanguage: String?): List<Category> =
         services.getCategories(acceptLanguage ?: "en")

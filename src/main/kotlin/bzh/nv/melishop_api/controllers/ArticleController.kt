@@ -9,12 +9,15 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api")
 class ArticleController(private val services: ArticleServices) {
 
+    @CrossOrigin(origins = ["http://localhost:8081"], allowedHeaders = ["*"], allowCredentials = "true")
     @GetMapping("/articles")
     fun getArticles(
         @RequestParam("categories", required = false) categoryIds: List<String>? = null,
         @RequestHeader("Accept-Language") acceptLanguage: String? = null
     ): List<ArticleResponse> = services.getArticles(categoryIds, acceptLanguage ?: "en")
 
+
+    @CrossOrigin(origins = ["http://localhost:8081"], allowedHeaders = ["*"], allowCredentials = "true")
     @GetMapping("/articles/{articleId}")
     fun getArticleById(
         @PathVariable articleId: String,

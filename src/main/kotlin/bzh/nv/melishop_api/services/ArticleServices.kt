@@ -73,10 +73,13 @@ class ArticleServices(
         if (categories.isNullOrEmpty()) {
             db.query("SELECT * FROM article") { rs, _ -> rs.toArticleResponse(language) }
         } else {
+            print(categories)
+            val placeholders = categories.joinToString(",") { "?"}
             db.query(
-                "SELECT * FROM article WHERE categoryId IN (?)",
+                "SELECT * FROM article WHERE categoryId IN ($placeholders)",
                 { rs, _ -> rs.toArticleResponse(language) },
-                categories.joinToString(",") { "'$it'" })
+                *categories.toTypedArray()
+            )
         }
 
     fun insertOrUpdateArticle(article: ArticleParams, language: String): ArticleResponse {
@@ -107,8 +110,9 @@ class ArticleServices(
             contentServices.insertOrUpdateContent("content_en", article.id!!, article.description.key, descriptionEn)
         val articleLabels = labelServices.getLabelsFromArticle(article.id!!, language)
         articleLabels.map { al -> al.id }.minus(article.labelIds.toSet()).also {
-            val deleteAssociation = "DELETE FROM article_label WHERE articleId = ? AND labelId in (?)"
-            db.update(deleteAssociation, article.id, it)
+            val placeholders = it.joinToString(",") { "?"}
+            val deleteAssociation = "DELETE FROM article_label WHERE articleId = ? AND labelId in ($placeholders)"
+            db.update(deleteAssociation, article.id, *it.toTypedArray())
         }
         val labelSqlInsert = "MERGE INTO article_label KEY (articleId, labelId) VALUES (?, ?)"
         article.labelIds.forEach { labelId ->
