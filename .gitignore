@@ -38,3 +38,9 @@ out/
 
 ### Kotlin ###
 .kotlin
+
+# Ignore application.properties
+application.properties
+
+# Ignore H2 database files
+/data/db
