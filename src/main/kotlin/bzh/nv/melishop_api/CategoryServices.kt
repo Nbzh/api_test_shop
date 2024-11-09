@@ -15,7 +15,7 @@ class CategoryServices(private val db: JdbcTemplate, private val contentServices
                 Category(
                     id = rs.getString("id"),
                     name = rs.getString("name").let { name ->
-                        contentServices.getContent(categoryId, "category_name", language) ?: name
+                        contentServices.getContent(categoryId, name, language) ?: name
                     },
                     image = rs.getString("image"),
                     color = rs.getString("color")
@@ -32,7 +32,7 @@ class CategoryServices(private val db: JdbcTemplate, private val contentServices
             Category(
                 id = categoryId,
                 name = rs.getString("name").let {
-                    contentServices.getContent(categoryId, "category_name", language) ?: it
+                    contentServices.getContent(categoryId, it, language) ?: it
                 },
                 image = rs.getString("image"),
                 color = rs.getString("color")

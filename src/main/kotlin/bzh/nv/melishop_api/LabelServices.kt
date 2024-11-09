@@ -9,24 +9,24 @@ import java.util.*
 @Service
 class LabelServices(private val db: JdbcTemplate, private val contentServices: ContentServices) {
 
-    fun getLabel(labelId: String, language: String): Label =
-        db.queryForObject(
-            "select * from label where id = ?",
-            { rs, _ ->
-                Label(
-                    id = rs.getString("id"),
-                    name = rs.getString("name").let { name ->
-                        contentServices.getContent(labelId, "label_name", language) ?: name
-                    },
-                    image = rs.getString("image")
-                )
-            },
-            labelId
-        ) ?: throw ResponseStatusException(
-            HttpStatus.NOT_FOUND,
-            "Label with id $labelId not found"
-        )
-
+    fun getLabel(labelId: String, language: String): Label? =
+        try {
+            db.queryForObject(
+                "select * from label where id = ?",
+                { rs, _ ->
+                    Label(
+                        id = rs.getString("id"),
+                        name = rs.getString("name").let { name ->
+                            contentServices.getContent(labelId, name, language) ?: name
+                        },
+                        image = rs.getString("image")
+                    )
+                },
+                labelId
+            )
+        } catch (e: Exception) {
+            null
+        }
 
     fun getLabels(language: String): List<Label> =
         db.query("select * from label") { rs, _ ->
@@ -61,11 +61,11 @@ class LabelServices(private val db: JdbcTemplate, private val contentServices: C
         val nameEn = label.name.content["en"]
         if (nameFr != null)
             contentServices.insertOrUpdateContent("content_fr", label.id!!, label.name.key, nameFr)
-        if(nameEn != null)
+        if (nameEn != null)
             contentServices.insertOrUpdateContent("content_en", label.id!!, label.name.key, nameEn)
         val sqlMerge = "MERGE INTO label KEY (id) VALUES (?, ?, ?)"
         db.update(sqlMerge, label.id, label.name.key, label.image)
-        return getLabel(label.id!!, language)
+        return getLabel(label.id!!, language) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Label ${label.id} not found")
     }
 
     fun insertOrUpdateLabels(labels: List<LabelParams>, language: String) =

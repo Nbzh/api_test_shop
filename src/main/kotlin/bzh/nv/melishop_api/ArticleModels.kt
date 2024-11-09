@@ -36,9 +36,9 @@ data class Article(
 data class ArticleParams(
     var id: String?,
     val categoryId: String,
-    val name: String,
+    val name: ContentParams,
     val image: String?,
-    val description: String?,
+    val description: ContentParams?,
     val labelIds : List<String>,
     val isVeggan: Boolean,
     val price: Double,

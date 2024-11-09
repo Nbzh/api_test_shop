@@ -12,12 +12,16 @@ class ContentServices(private val db: JdbcTemplate) {
         }
 
     private fun selectContent(tableName: String, resourceId: String, key: String): String? =
-        db.queryForObject(
-            """select content from $tableName where resourceId = ? and contentKey = ?""",
-            { rs, _ -> rs.getString("content") },
-            resourceId,
-            key
-        )
+        try {
+            db.queryForObject(
+                "select content from $tableName where resourceId = ? and contentKey = ?",
+                { rs, _ -> rs.getString("content") },
+                resourceId,
+                key
+            )
+        } catch (e: Exception) {
+            null
+        }
 
     @Suppress("SqlNoInjection", "SqlUnsafe")
     fun insertOrUpdateContent(tableName: String, resourceId: String, key: String, content: String) {
