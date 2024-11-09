@@ -18,7 +18,7 @@ data class Category(var id: String, val name: String, val image: String?, val co
 
 data class LabelParams(var id: String?, val name: ContentParams, val image: String?)
 
-data class CategoryParams(var id: String?, val name: String, val image: String?, val color: String?)
+data class CategoryParams(var id: String?, val name: ContentParams, val image: String?, val color: String?)
 
 data class ContentParams(val key : String, val content : Map<String, String>)
 

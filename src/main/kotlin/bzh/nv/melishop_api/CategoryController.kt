@@ -7,13 +7,20 @@ import org.springframework.web.bind.annotation.*
 class CategoryController(private val services: CategoryServices) {
 
     @GetMapping("/categories")
-    fun getCategories() : List<Category> = services.getCategories()
+    fun getCategories(@RequestHeader("Accept-Language") acceptLanguage: String?): List<Category> =
+        services.getCategories(acceptLanguage ?: "en")
 
     @PostMapping("category")
-    fun postCategory(@RequestBody categoryParams : CategoryParams) =
-        services.insertOrUpdateCategory(categoryParams)
+    fun postCategory(
+        @RequestBody categoryParams: CategoryParams,
+        @RequestHeader("Accept-Language") acceptLanguage: String?
+    ) =
+        services.insertOrUpdateCategory(categoryParams, acceptLanguage ?: "en")
 
     @PostMapping("categories")
-    fun postCategories(@RequestBody categoryParams : List<CategoryParams>) =
-        services.insertOrUpdateCategories(categoryParams)
+    fun postCategories(
+        @RequestBody categoryParams: List<CategoryParams>,
+        @RequestHeader("Accept-Language") acceptLanguage: String?
+    ) =
+        services.insertOrUpdateCategories(categoryParams, acceptLanguage ?: "en")
 }
