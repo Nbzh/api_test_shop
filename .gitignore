@@ -40,7 +40,7 @@ out/
 .kotlin
 
 # Ignore application.properties
-application.properties
+src/main/resources/application.properties
 
 # Ignore H2 database files
 /data/db
