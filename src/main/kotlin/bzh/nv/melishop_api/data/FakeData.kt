@@ -1,6 +1,7 @@
-package bzh.nv.melishop_api
+package bzh.nv.melishop_api.data
 
-import java.util.UUID
+import bzh.nv.melishop_api.formatToTwoDecimalPlaces
+import java.util.*
 import kotlin.random.Random
 
 val fakeLabels

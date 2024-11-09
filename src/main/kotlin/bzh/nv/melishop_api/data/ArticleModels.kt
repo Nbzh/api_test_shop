@@ -1,4 +1,4 @@
-package bzh.nv.melishop_api
+package bzh.nv.melishop_api.data
 
 data class ArticleResponse(
     var id: String,

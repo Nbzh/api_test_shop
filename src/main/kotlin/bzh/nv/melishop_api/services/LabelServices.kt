@@ -1,5 +1,7 @@
-package bzh.nv.melishop_api
+package bzh.nv.melishop_api.services
 
+import bzh.nv.melishop_api.data.Label
+import bzh.nv.melishop_api.data.LabelParams
 import org.springframework.http.HttpStatus
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Service

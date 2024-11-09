@@ -1,5 +1,8 @@
-package bzh.nv.melishop_api
+package bzh.nv.melishop_api.controllers
 
+import bzh.nv.melishop_api.data.Category
+import bzh.nv.melishop_api.data.CategoryParams
+import bzh.nv.melishop_api.services.CategoryServices
 import org.springframework.web.bind.annotation.*
 
 @RestController
