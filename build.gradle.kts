@@ -27,6 +27,7 @@ dependencies {
 	implementation("javax.xml.bind:jaxb-api:2.3.1")
 	implementation("com.sun.xml.bind:jaxb-impl:2.3.1")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("com.google.firebase:firebase-admin:9.4.1")
 	runtimeOnly("com.h2database:h2")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")

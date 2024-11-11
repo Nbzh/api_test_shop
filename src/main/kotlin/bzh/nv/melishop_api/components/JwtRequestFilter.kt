@@ -1,46 +1,41 @@
 package bzh.nv.melishop_api.components
 
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseToken
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
-import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.security.core.userdetails.UserDetailsService
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 
 @Component
-class JwtRequestFilter(
-    private val jwtUtil: JwtUtil,
-    private val userDetailsService: UserDetailsService
-) : OncePerRequestFilter() {
+class JwtRequestFilter : OncePerRequestFilter() {
+
+    private val excludedPaths = listOf("/api/authenticate", "/api/anonymous-token")
 
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
         chain: FilterChain
     ) {
-        val authorizationHeader = request.getHeader("Authorization")
-
-        var username: String? = null
-        var jwt: String? = null
-
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            jwt = authorizationHeader.substring(7)
-            username = jwtUtil.extractAllClaims(jwt).subject
+        val requestPath = request.requestURI
+        if (excludedPaths.contains(requestPath)) {
+            chain.doFilter(request, response)
+            return
         }
 
-        if (username != null && SecurityContextHolder.getContext().authentication == null) {
-            val userDetails = userDetailsService.loadUserByUsername(username)
-
-            if (jwtUtil.validateToken(jwt!!, userDetails.username)) {
-                val authenticationToken = UsernamePasswordAuthenticationToken(
-                    userDetails, null, userDetails.authorities
-                )
-                authenticationToken.details = WebAuthenticationDetailsSource().buildDetails(request)
-                SecurityContextHolder.getContext().authentication = authenticationToken
+        val token = request.getHeader("Authorization")?.substring(7)
+        if (token != null) {
+            try {
+                val decodedToken: FirebaseToken = FirebaseAuth.getInstance().verifyIdToken(token)
+                request.setAttribute("firebaseToken", decodedToken)
+            } catch (e: Exception) {
+                response.status = HttpServletResponse.SC_UNAUTHORIZED
+                return
             }
+        } else {
+            response.status = HttpServletResponse.SC_UNAUTHORIZED
+            return
         }
         chain.doFilter(request, response)
     }

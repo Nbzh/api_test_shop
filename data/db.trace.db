@@ -1,0 +1,15 @@
+2024-11-10 00:00:41.617703+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CONTENT_FR" not found (this database is empty); SQL statement:
+MERGE INTO content_fr KEY (resourceId, contentKey) VALUES (?, ?, ?) [42104-224]
+2024-11-10 00:01:11.867989+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CONTENT_FR" not found (this database is empty); SQL statement:
+MERGE INTO content_fr KEY (resourceId, contentKey) VALUES (?, ?, ?) [42104-224]
+2024-11-10 00:01:13.018247+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CONTENT_FR" not found (this database is empty); SQL statement:
+MERGE INTO content_fr KEY (resourceId, contentKey) VALUES (?, ?, ?) [42104-224]
+2024-11-10 00:01:13.959663+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CONTENT_FR" not found (this database is empty); SQL statement:
+MERGE INTO content_fr KEY (resourceId, contentKey) VALUES (?, ?, ?) [42104-224]
+2024-11-10 00:01:17.229854+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CONTENT_FR" not found (this database is empty); SQL statement:
+MERGE INTO content_fr KEY (resourceId, contentKey) VALUES (?, ?, ?) [42104-224]
